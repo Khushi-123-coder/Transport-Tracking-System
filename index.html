@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bus Tracker | Spot Your Ride</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* Extra CSS for timeline dots if not in your style.css */
+        .dot { width: 12px; height: 12px; background: #cbd5e1; border-radius: 50%; display: inline-block; margin-right: 15px; }
+        .timeline-row.active { background: #f0f7ff; border-left: 4px solid var(--primary-lavender); }
+    </style>
+</head>
+<body>
+
+    <div class="search-section">
+        <h1 class="main-title">Live Running Status | Spot Your Ride</h1>
+        <div class="search-container">
+            <input type="text" id="bus-input" placeholder="Enter Bus Number (e.g. PB-01-1234)..." class="search-input">
+            <button class="search-btn" onclick="trackBus()">Check Live Status</button>
+        </div>
+    </div>
+
+    <div class="details-bar">
+        <div class="dropdown-group">
+            <label>Select Journey Station</label>
+            <select id="station-select">
+                <option value="all">ALL STATIONS</option>
+                </select>
+        </div>
+        <div class="dropdown-group">
+            <label>Select Journey Date</label>
+            <select id="date-select">
+                <option>Today, 23 Mar 2026</option>
+                <option>Tomorrow, 24 Mar 2026</option>
+            </select>
+        </div>
+        <button class="submit-small" onclick="trackBus()">Submit</button>
+    </div>
+
+    <div id="map-container" style="max-width: 850px; margin: 0 auto 30px; display: none;">
+        <div id="map" style="height: 350px; width: 100%; border-radius: 24px; border: 4px solid var(--primary-lavender); box-shadow: 0 10px 30px rgba(123, 97, 255, 0.3);"></div>
+    </div>
+
+    <div class="status-container" id="status-container" style="display: none;">
+        <div class="status-header">
+            <i data-lucide="bus" class="bus-icon"></i>
+            <div>
+                <p class="destination-text" id="dest-text">Searching for bus...</p>
+                <p class="update-text" id="last-update">Last Updated: --:--</p>
+            </div>
+        </div>
+
+        <div class="table-header">
+            <span>Station</span>
+            <span>Arrives</span>
+            <span>Departs</span>
+            <span>Status</span>
+        </div>
+
+        <div id="timeline-body">
+            </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // Icons Load
+        window.onload = () => {
+            if (window.lucide) lucide.createIcons();
+        };
+
+        // Simple error handler for Map
+        window.gm_authFailure = function() {
+            console.warn("Google Maps failed. Switching to Leaflet...");
+            document.getElementById('map').innerHTML = "<p style='padding:20px;'>Using Leaflet Map (Free Mode)...</p>";
+        };
+    </script>
+</body>
+</html>
